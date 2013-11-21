@@ -95,7 +95,7 @@ Since we're in Javascript let's leverage our ability to use some logic. CssJs au
 	$(example).html('<pre>' + suchPower + '</pre>')
 			  .css('font-family', 'Courier');
 
-# Sheet Creation and Customization
+# Customization
 By default CssJs uses a tab to space out it's generated CSS, but by changing the `css.space` variable to can change it to whatever you like.
 
 	css.space = '  '; //just two spaces
@@ -114,6 +114,7 @@ By default CssJs uses a tab to space out it's generated CSS, but by changing the
 	$(example).html('<pre>' + customSpacing + '</pre>')
 			  .css('font-family', 'Courier');
 
+# Sheet Creation
 A neat workflow using CssJs is to use the `css.render({...})` function while testing and developing to automatically generate you a style sheet and add it to your page. When you're happy with the results, simply use `css({...})` to generate the CSS string and save it to your own file for production. No need to preprocess all the time!
 
 	css.render({
