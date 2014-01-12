@@ -95,6 +95,10 @@ Since we're in Javascript let's leverage our ability to use some logic. CssJs au
 	$(example).html('<pre>' + suchPower + '</pre>')
 			  .css('font-family', 'Courier');
 
+
+#Color
+Write up some awesomeness using this lib, https://github.com/harthur/color
+
 # Customization
 By default CssJs uses a tab to space out it's generated CSS, but by changing the `css.space` variable to can change it to whatever you like.
 
