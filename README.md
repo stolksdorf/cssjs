@@ -1,4 +1,4 @@
-Check out the interactive demo [here!](http://stolksdorf.github.io/cssjs)
+Check out the interactive demo [here!](http://stolksdorf.github.io/Cssjs)
 
 # What is CssJs?
 CssJs is a micro css preprocessor that take Javascript objects and turns them into valid CSS. Taking advantage of nesting within js objects and the ability to use functions, let's you have powerful and clean CSS without having to learn another preprocessing language or even install anything!
