@@ -5,7 +5,7 @@
 
 	"runnable_code_blocks" : true,
 	"show_html_example"    : true,
-	"scripts"              : ["css.js"],
+	"scripts"              : ["css.js", "ext_libs/color.js"],
 
 	"local" : {
 		"user"        : "stolksdorf",

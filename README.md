@@ -6,6 +6,27 @@ CssJs is a micro css preprocessor that take Javascript objects and turns them in
 CssJs doesn't depend on any other library. You can use it at run time by directly injecting your JS styles as a CSS tag in the page using `css.render({..})`. Or just output the string using `css({...})` and save it to a css file.
 
 
+	<textarea id='cssString'>
+	.navbar{
+		height           : 53px;
+		min-height       : 53px;
+		margin-bottom    : 25px;
+
+		background-color : #ecf0f1;
+		font-size        : 16px;
+		color            : #2C3E50;
+	}
+	</textarea>
+
+okay neat
+
+	var cssAsJSON = css.toJSON($('#cssString').val());
+
+	$(example).html('<pre>' + JSON.stringify(cssAsJSON, null, '\t') + '</pre>')
+			  .css('font-family', 'Courier');
+
+
+
 # Simple Example
 Here's a basic example. Notice that you can either quote the rule if it has a dash in it, or you can just use camel casing.
 
@@ -97,7 +118,58 @@ Since we're in Javascript let's leverage our ability to use some logic. CssJs au
 
 
 #Color
-Write up some awesomeness using this lib, https://github.com/harthur/color
+Write up some awesomeness using this lib, https://github.com/harthur/color. Here we're automatically creating the coloring for a button.
+
+	css.plugins.buttonColor = function(btnColor){
+		btnColor = Color(btnColor)
+		return {
+			backgroundColor : btnColor.hexString(),
+			color : btnColor.luminosity() < 0.9 ? 'white' : 'black',
+			border : "1px solid " + btnColor.darken(0.3).hexString(),
+			cursor : 'pointer',
+			':hover' : {
+				backgroundColor : btnColor.lighten(0.3).hexString()
+			},
+			'.pressed' : {
+				backgroundColor : btnColor.darken(0.3).hexString()
+			}
+		}
+	}
+
+	var colorfulButton = css({
+		'.loginBtn' : {
+			marginRight : '10px',
+			buttonColor: '#2ecc71'
+		}
+	})
+
+	$(example).html('<pre>' + colorfulButton + '</pre>')
+			  .css('font-family', 'Courier');
+
+
+
+#Conversion
+If you already have some existing CSS that you want to trun into JSON you can use the `css.toJSON()` command to convert css strings.
+
+	<textarea id='cssString'>
+	.navbar{
+		height           : 53px;
+		margin-bottom    : 25px;
+		background-color : #ecf0f1;
+		font-size        : 16px;
+		color            : #2C3E50;
+	}
+	.navbar:hover{
+		color : #16A085;
+	}
+	</textarea>
+
+And the code to convert it.
+
+	var cssAsJSON = css.toJSON($('#cssString').val());
+
+	$(example).html('<pre>' + JSON.stringify(cssAsJSON, null, '\t') + '</pre>')
+			  .css('font-family', 'Courier');
 
 # Customization
 By default CssJs uses a tab to space out it's generated CSS, but by changing the `css.space` variable to can change it to whatever you like.

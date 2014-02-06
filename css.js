@@ -63,6 +63,30 @@
 		return rules.join('');
 	};
 
+	//Converts a string of css into a json object
+	css.toJSON = function(cssString){
+		var result = {};
+		var convertCode = function(code){
+			var r = {};
+			code = code.split(';')
+			for(var i in code){
+				if(code[i].indexOf(':') !== -1){
+					var parts = code[i].split(':');
+					r[parts[0].trim()] = parts[1].trim();
+				}
+			}
+			return r;
+		};
+		var rules = cssString.split('}');
+		for(var i = 0; i< rules.length; i++){
+			var parts = rules[i].split('{');
+			if(parts[0].trim() !== ""){
+				result[parts[0].trim()] = convertCode(parts[1]);
+			}
+		}
+		return result;
+	};
+
 	css.space   = '\t';
 	css.plugins = {};
 	css.render = function(json){

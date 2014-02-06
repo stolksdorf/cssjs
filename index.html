@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" ></script>
+	<script src="http://cdn.jsdelivr.net/codemirror/3.14.0/codemirror.min.js" ></script>
+	<link href='http://fonts.googleapis.com/css?family=Lato:400,900' rel='stylesheet' type='text/css'>
+	<link href='http://cdn.jsdelivr.net/codemirror/3.14.0/codemirror.css' rel='stylesheet'>
+	<script>
+		var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9\+\/\=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/\r\n/g,"\n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}}
+	</script>
+</head>
+<body>
+	<div style="font-family: 'Open Sans', sans-serif;margin:auto;width:400px;text-align:center;margin-top:200px; color:#ddd; font-size:2em;">
+		<div class='waiting'>
+			<img class='spinner' src='https://i.imgur.com/8Co9fCd.gif'></img>
+			<div style='margin-top:20px;'> Loading project... </div>
+		</div>
+
+		<div class='error' style='display:none'>Oops, there was an error :(</div>
+	</div>
+</body>
+<script>
+	extend = function(){
+		var result = {};
+		for(var i in arguments){
+			var obj = arguments[i];
+			for(var propName in obj){
+				if(obj.hasOwnProperty(propName)){ result[propName] = obj[propName]; }
+			}
+		}
+		return result;
+	};
+
+	var projectData = {};
+
+	(function(){
+
+		var numCalls = 0;
+		var TestMode = document.URL.indexOf('file') === 0;
+
+		//get user and repo from URL
+		if(!TestMode){
+			var temp = document.URL.split('/');
+			projectData.user = temp[2].split('.')[0];
+			projectData.repo = temp[temp.length-2];
+		}
+		projectData.urls = {
+			repo   : 'https://api.github.com/repos/' + projectData.user + '/' + projectData.repo,
+			readme : 'https://api.github.com/repos/' + projectData.user + '/' + projectData.repo + '/readme',
+			config : 'https://api.github.com/repos/' + projectData.user + '/' + projectData.repo + '/contents/paintjob-config.json',
+			pj     : 'https://api.github.com/repos/stolksdorf/Paintjob/contents/paintjob.compiled.html',
+			scripts : 'https://api.github.com/repos/' + projectData.user + '/' + projectData.repo + '/contents/'
+		};
+		if(TestMode){
+			projectData.urls = {
+				repo   : undefined,
+				readme : 'README.md',
+				config : 'paintjob-config.json',
+				pj     : 'https://api.github.com/repos/stolksdorf/Paintjob/contents/paintjob.compiled.html',
+				scripts : ''
+				//pj     : 'paintjob.compiled.html'
+			};
+		}
+
+		var remoteCall = function(url, callback){
+			if(!url) return;
+			numCalls++;
+			$.ajax({
+				url : url,
+				type : 'GET',
+				headers: { 'Accept': 'application/vnd.github.raw' },
+				error  : function(result){
+					numCalls = -1;
+					$('.error').show();
+					$('.waiting').hide();
+				},
+				success : function(data){
+					callback(data);
+					numCalls--;
+					if(numCalls === 0){
+						$('body').fadeOut(200, function(){
+							$('body').html(pjHtml).fadeIn(300);
+						});
+					}
+				}
+			});
+			return;
+		};
+
+
+		remoteCall(projectData.urls.config, function(config){
+			if(config.content) config = Base64.decode(config.content);
+			eval("var result = " + config);
+			projectData = extend(projectData, result);
+		});
+
+		remoteCall(projectData.urls.repo, function(repoData){
+			projectData.name        = repoData.name;
+			projectData.github_url  = repoData.owner.html_url;
+			projectData.description = repoData.description;
+		});
+
+		remoteCall(projectData.urls.readme, function(readme){
+			projectData.readme = readme;
+		});
+
+		remoteCall(projectData.urls.pj, function(pjHtml){
+			window.pjHtml = pjHtml
+		});
+
+	})();
+
+
+</script>
+</html>
