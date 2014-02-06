@@ -5,28 +5,6 @@ CssJs is a micro css preprocessor that take Javascript objects and turns them in
 
 CssJs doesn't depend on any other library. You can use it at run time by directly injecting your JS styles as a CSS tag in the page using `css.render({..})`. Or just output the string using `css({...})` and save it to a css file.
 
-
-	<textarea id='cssString'>
-	.navbar{
-		height           : 53px;
-		min-height       : 53px;
-		margin-bottom    : 25px;
-
-		background-color : #ecf0f1;
-		font-size        : 16px;
-		color            : #2C3E50;
-	}
-	</textarea>
-
-okay neat
-
-	var cssAsJSON = css.toJSON($('#cssString').val());
-
-	$(example).html('<pre>' + JSON.stringify(cssAsJSON, null, '\t') + '</pre>')
-			  .css('font-family', 'Courier');
-
-
-
 # Simple Example
 Here's a basic example. Notice that you can either quote the rule if it has a dash in it, or you can just use camel casing.
 
