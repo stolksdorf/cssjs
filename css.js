@@ -52,7 +52,10 @@
 		};
 
 		var addRule = function(scope, contents){
-			rules.unshift(scope.join(' ').replace(' :',':') + '{\n' +
+			rules.unshift(scope.join(' ')
+				.replace(' :',':')
+				.replace(' &','')
+				+ '{\n' +
 				processContents(scope, contents)
 				 + '}\n');
 		};
