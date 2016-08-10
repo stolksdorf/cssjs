@@ -1,7 +1,6 @@
 {
 	"icon_class" : "icon-bolt",
 	"icon_color" : "yellow",
-	//"example_image" : "http://i.imgur.com/Mlpfb.gif",
 
 	"runnable_code_blocks" : true,
 	"show_html_example"    : true,
@@ -40,5 +39,5 @@
 			"tooltip"    : "Check out more cool things"
 		}
 
-	],
+	]
 }
