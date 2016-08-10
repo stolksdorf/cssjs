@@ -1,1 +1,44 @@
-test
+{
+	"icon_class" : "icon-bolt",
+	"icon_color" : "yellow",
+	//"example_image" : "http://i.imgur.com/Mlpfb.gif",
+
+	"runnable_code_blocks" : true,
+	"show_html_example"    : true,
+	"scripts"              : ["css.js", "ext_libs/color.js"],
+
+	"local" : {
+		"user"        : "stolksdorf",
+		"repo"        : "cssjs",
+		"name"        : "cssjs",
+		"description" : "This is just some sample text for when I'm local testing"
+	},
+
+	"icons" : [
+		{
+			"icon_class" : "icon-github",
+			"color"      : "blue",
+			"link"       : "https://github.com/stolksdorf/cssjs",
+			"tooltip"    : "View on Github"
+		},
+		{
+			"icon_class" : "icon-code-fork",
+			"color"      : "green",
+			"link"       : "https://github.com/stolksdorf/cssjs/fork",
+			"tooltip"    : "Fork on Github"
+		},
+		{
+			"icon_class" : "icon-code",
+			"color"      : "steel",
+			"link"       : "https://raw.github.com/stolksdorf/cssjs/master/css.js",
+			"tooltip"    : "Get Code!"
+		},
+		{
+			"icon_class" : "icon-home",
+			"color"      : "red",
+			"link"       : "https://github.com/stolksdorf",
+			"tooltip"    : "Check out more cool things"
+		}
+
+	],
+}
